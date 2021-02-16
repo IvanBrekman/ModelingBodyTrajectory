@@ -12,9 +12,9 @@ equation = equation.subs({h: 31.25, v0: 50})
 solves = sympy.solveset(equation, a, sympy.S.Reals)
 print(equation, solves)
 for solve in solves:
-    print()
+    print(solve)
 
-exp = 'sin(x) ** 2 - 0.25'
-ans = sympy.solve(exp, x)
+exp = str(equation)
+ans = sympy.solve(exp, a)
 for num in ans:
     print(degrees(num))

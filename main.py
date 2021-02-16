@@ -1,19 +1,30 @@
 import sys
-
 import numpy as np
-from math import sin, cos, radians as rad
 
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QPushButton, QComboBox, QTableWidgetItem, QHeaderView
+
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QTimer, QSize
 
 from PyQt5 import uic
 
-DATA_DIR = "resources"
+from formulas import *
+from constants import *
+
+from math import sin, cos, radians as rad
+
+variables = {v0: None, a: None, h: None, s: None, t: None, vmx: None, vmn: None, tu: None, td: None}
+name_to_variables = {
+    'Стартовая скорость (м/с)': v0, 'Угол наклона (degrees)': a,
+    'Макс. высота (м)': h, 'Дальность полета (м)': s, 'Время полета (с)': t,
+    'Время подъема (с)': tu, 'Время спуска (с)': td,
+    'Макс. скорость (м/с)': vmx, 'Мин. скорость (м/с)': vmn
+}
 
 
 class TrajectoryGraph(FigureCanvas):
@@ -37,10 +48,10 @@ class TrajectoryGraph(FigureCanvas):
         :return: None
         """
         def xf(tf):
-            return x0 + v0 * cos(a) * tf
+            return _x0 + _v0 * cos(_a) * tf
 
         def yf(tf):
-            return y0 + (v0 * sin(a) * tf) - ((g * (tf ** 2)) / 2)
+            return _y0 + (_v0 * sin(_a) * tf) - ((g * (tf ** 2)) / 2)
 
         def init():
             data.set_data([], [])
@@ -51,41 +62,44 @@ class TrajectoryGraph(FigureCanvas):
             return data,
 
         # Начальные значения
-        g = 10
-        a = rad(self.parent.angle_dsb.value())
-        v0 = self.parent.v0_dsb.value()
-        x0 = self.parent.x0_dsb.value()
-        y0 = self.parent.y0_dsb.value()
+        _a = rad(self.parent.angle_dsb.value())
+        _v0 = self.parent.v0_dsb.value()
+        _x0 = self.parent.x0_dsb.value()
+        _y0 = self.parent.y0_dsb.value()
         #
 
         # Основные параметры броска
-        h = y0 + ((v0 * sin(a)) ** 2) / (2 * g)
-        s = x0 + v0 ** 2 * sin(a * 2) / g
-        t_up = v0 * sin(a) / g
-        t_down = (2 * h / g) ** 0.5
-        t = t_up + t_down
+        _h = _y0 + ((_v0 * sin(_a)) ** 2) / (2 * g)
+        _s = _x0 + _v0 ** 2 * sin(_a * 2) / g
+        _t_up = _v0 * sin(_a) / g
+        _t_down = (2 * _h / g) ** 0.5
+        _t = _t_up + _t_down
+        print(_t, type(_t))
         #
 
         # Вычисление точек
         pfg = 1000
-        x = xf(np.linspace(0, t, pfg))
-        y = yf(np.linspace(0, t, pfg))
+        x = xf(np.linspace(0, _t, pfg))
+        y = yf(np.linspace(0, _t, pfg))
         #
 
-        self.axes_limit = max(xf(t), h + 10)
+        # Построение графика
+        self.axes_lim = max(xf(_t), _h + 10)
 
         self.figure.clear()
         self.ax = self.figure.add_subplot(1, 1, 1)
-        self.customize_graph(self.axes_limit)
+        self.customize_graph(self.axes_lim)
 
         data, = self.ax.plot([], [])
         frames, interval = 200, 10
-        self.ax.text(self.axes_limit * .65, self.axes_limit * .9, '$t_{полн} = ' + f'{t:.2f}' + 'с$')
-        self.ax.text(self.axes_limit * .65, self.axes_limit * .8, '$h_{max} = ' + f'{h:.2f}' + 'м$')
-        self.ax.text(self.axes_limit * .65, self.axes_limit * .7, '$s_{пол} = ' + f'{s:.2f}' + 'м$')
+        self.ax.text(self.axes_lim * .65, self.axes_lim * .9, '$t_{полн} = ' + f'{_t:.2f}' + 'с$')
+        self.ax.text(self.axes_lim * .65, self.axes_lim * .8, '$h_{max} = ' + f'{_h:.2f}' + 'м$')
+        self.ax.text(self.axes_lim * .65, self.axes_lim * .7, '$s_{пол} = ' + f'{_s:.2f}' + 'м$')
         self.anim = FuncAnimation(self.figure, animation, init_func=init,
                                   frames=frames, interval=interval, repeat=False, blit=True)
         self.draw()
+        #
+
         return frames * interval
 
     def customize_graph(self, limit):
@@ -104,6 +118,8 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         uic.loadUi(f"{DATA_DIR}/ui_files/main.ui", self)
+
+        # Первый tab
         self.graph = TrajectoryGraph(self, self.graph_tab, 5, 4)
 
         self.timer = QTimer()
@@ -113,8 +129,25 @@ class MainWindow(QMainWindow):
         self.build_btn.resize(75, 25)
 
         self.build_btn.clicked.connect(self.build_graph)
+        #
+
+        # Второй tab
+        self.add_btn = QPushButton()
+        self.add_btn.setIcon(QIcon('resources/images/plus.png'))
+        self.add_btn.setIconSize(QSize(28, 28))
+        self.add_btn.clicked.connect(self.add_row)
+        self.table_cbs = []
+        self.delete_buttons = []
+
+        self.known_values_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.known_values_table.setRowCount(1)
+        self.known_values_table.setCellWidget(0, 2, self.add_btn)
+
+        self.find_btn.clicked.connect(self.find_values)
+        #
 
     def build_graph(self):
+        """ Функция запускает "строительство" графика """
         anim_time = self.graph.plot()
         self.build_btn.setEnabled(False)
 
@@ -122,8 +155,52 @@ class MainWindow(QMainWindow):
         self.timer.start()
 
     def finish_build(self):
+        """ Слот для конца "строительства" графика """
         self.timer.stop()
         self.build_btn.setEnabled(True)
+
+    def add_row(self):
+        """ Добавляет строку в таблицу известных величин (2 tab) """
+        def suitable_items(all_items):
+            table_items = [table_cb.currentText() for table_cb in self.table_cbs]
+            return list(filter(lambda item: item not in table_items and item != 'Все', all_items))
+
+        rows = self.known_values_table.rowCount()
+        self.known_values_table.insertRow(rows - 1)
+
+        cb = QComboBox()
+        items = [self.find_type_cb.itemText(i) for i in range(self.find_type_cb.count())]
+        cb.addItems(suitable_items(items))
+
+        del_btn = QPushButton(delete_char)
+        del_btn.clicked.connect(self.delete_row)
+
+        self.table_cbs.append(cb)
+        self.delete_buttons.append(del_btn)
+
+        self.known_values_table.setCellWidget(rows - 1, 0, cb)
+        self.known_values_table.setItem(rows - 1, 1, QTableWidgetItem('0'))
+        self.known_values_table.setCellWidget(rows - 1, 2, del_btn)
+
+    def delete_row(self):
+        """ Удаляет строку из таблицы известных величин (2 tab) """
+
+        row_index = self.delete_buttons.index(self.sender())
+        self.delete_buttons.remove(self.sender())
+        self.table_cbs.pop(row_index)
+        self.known_values_table.removeRow(row_index)
+
+    def find_values(self):
+        """ Функция "ищет" необходимые величины """
+        for var in variables:
+            variables[var] = None
+
+        for i in range(self.known_values_table.rowCount() - 1):
+            item_name = self.table_cbs[i].currentText()
+            value = float(self.known_values_table.item(i, 1).text())
+
+            variables[name_to_variables[item_name]] = value
+        print(variables)
 
     def mouseMoveEvent(self, a0) -> None:
         print(a0.pos())
