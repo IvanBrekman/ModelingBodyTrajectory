@@ -5,11 +5,11 @@ from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QPushButton, QComboBox, QTableWidgetItem, QHeaderView
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QTimer, QSize
+from PyQt5.QtGui import QIcon, QColor
+from PyQt5.QtCore import QTimer, QSize, Qt
 
 from PyQt5 import uic
 
@@ -19,12 +19,13 @@ from constants import *
 from math import sin, cos, radians as rad
 
 variables = {v0: None, a: None, h: None, s: None, t: None, vmx: None, vmn: None, tu: None, td: None}
-name_to_variables = {
+name_to_variable = {
     'Стартовая скорость (м/с)': v0, 'Угол наклона (degrees)': a,
     'Макс. высота (м)': h, 'Дальность полета (м)': s, 'Время полета (с)': t,
     'Время подъема (с)': tu, 'Время спуска (с)': td,
     'Макс. скорость (м/с)': vmx, 'Мин. скорость (м/с)': vmn
 }
+variable_to_name = {value: key for key, value in name_to_variable.items()}
 
 
 class TrajectoryGraph(FigureCanvas):
@@ -47,11 +48,12 @@ class TrajectoryGraph(FigureCanvas):
         Отрисовка траектории движения брошенного тела
         :return: None
         """
+
         def xf(tf):
             return _x0 + _v0 * cos(_a) * tf
 
         def yf(tf):
-            return _y0 + (_v0 * sin(_a) * tf) - ((g * (tf ** 2)) / 2)
+            return _y0 + (_v0 * sin(_a) * tf) - ((g_const * (tf ** 2)) / 2)
 
         def init():
             data.set_data([], [])
@@ -69,10 +71,10 @@ class TrajectoryGraph(FigureCanvas):
         #
 
         # Основные параметры броска
-        _h = _y0 + ((_v0 * sin(_a)) ** 2) / (2 * g)
-        _s = _x0 + _v0 ** 2 * sin(_a * 2) / g
-        _t_up = _v0 * sin(_a) / g
-        _t_down = (2 * _h / g) ** 0.5
+        _h = _y0 + ((_v0 * sin(_a)) ** 2) / (2 * g_const)
+        _s = _x0 + _v0 ** 2 * sin(_a * 2) / g_const
+        _t_up = _v0 * sin(_a) / g_const
+        _t_down = (2 * _h / g_const) ** 0.5
         _t = _t_up + _t_down
         print(_t, type(_t))
         #
@@ -132,6 +134,9 @@ class MainWindow(QMainWindow):
         #
 
         # Второй tab
+        self.error_message = QMessageBox(self)
+        self.error_message.setWindowTitle('Ошибка')
+
         self.add_btn = QPushButton()
         self.add_btn.setIcon(QIcon('resources/images/plus.png'))
         self.add_btn.setIconSize(QSize(28, 28))
@@ -142,6 +147,10 @@ class MainWindow(QMainWindow):
         self.known_values_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.known_values_table.setRowCount(1)
         self.known_values_table.setCellWidget(0, 2, self.add_btn)
+
+        self.unknown_values_table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeToContents)
+        self.unknown_values_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
         self.find_btn.clicked.connect(self.find_values)
         #
@@ -161,12 +170,13 @@ class MainWindow(QMainWindow):
 
     def add_row(self):
         """ Добавляет строку в таблицу известных величин (2 tab) """
+
         def suitable_items(all_items):
             table_items = [table_cb.currentText() for table_cb in self.table_cbs]
             return list(filter(lambda item: item not in table_items and item != 'Все', all_items))
 
         rows = self.known_values_table.rowCount()
-        self.known_values_table.insertRow(rows - 1)
+        self.known_values_table.insertRow(rows)
 
         cb = QComboBox()
         items = [self.find_type_cb.itemText(i) for i in range(self.find_type_cb.count())]
@@ -178,9 +188,9 @@ class MainWindow(QMainWindow):
         self.table_cbs.append(cb)
         self.delete_buttons.append(del_btn)
 
-        self.known_values_table.setCellWidget(rows - 1, 0, cb)
-        self.known_values_table.setItem(rows - 1, 1, QTableWidgetItem('0'))
-        self.known_values_table.setCellWidget(rows - 1, 2, del_btn)
+        self.known_values_table.setCellWidget(rows, 0, cb)
+        self.known_values_table.setItem(rows, 1, QTableWidgetItem('0'))
+        self.known_values_table.setCellWidget(rows, 2, del_btn)
 
     def delete_row(self):
         """ Удаляет строку из таблицы известных величин (2 tab) """
@@ -188,22 +198,46 @@ class MainWindow(QMainWindow):
         row_index = self.delete_buttons.index(self.sender())
         self.delete_buttons.remove(self.sender())
         self.table_cbs.pop(row_index)
-        self.known_values_table.removeRow(row_index)
+        self.known_values_table.removeRow(row_index + 1)
 
     def find_values(self):
         """ Функция "ищет" необходимые величины """
         for var in variables:
             variables[var] = None
 
-        for i in range(self.known_values_table.rowCount() - 1):
-            item_name = self.table_cbs[i].currentText()
+        for i in range(1, self.known_values_table.rowCount()):
+            item_name = self.table_cbs[i - 1].currentText()
             value = float(self.known_values_table.item(i, 1).text())
 
-            variables[name_to_variables[item_name]] = value
-        print(variables)
+            variables[name_to_variable[item_name]] = value
 
-    def mouseMoveEvent(self, a0) -> None:
-        print(a0.pos())
+        try:
+            known_values = {key: variables[key] for key in
+                            filter(lambda key: variables[key] is not None, variables)}
+            known_values, formulas = find(known_values)
+            info = [
+                (variable_to_name[key], f'{key} = {formulas[key][0]}',
+                 f'{float(known_values[key]):.2f}')
+                for key in formulas
+            ]
+            print(*info, sep='\n')
+        except ValueError as ve:
+            self.error_message.setText(ve.__str__())
+            self.error_message.show()
+            return
+
+        if not info:
+            self.error_message.setText('С имеющимися данными невозможно '
+                                       'рассчитать какую-либо величину')
+            self.error_message.show()
+
+        self.unknown_values_table.setRowCount(0)
+        for i in range(len(info)):
+            self.unknown_values_table.setRowCount(self.unknown_values_table.rowCount() + 1)
+            for j in range(len(info[0])):
+                self.unknown_values_table.setItem(i, j, QTableWidgetItem(str(info[i][j])))
+                self.unknown_values_table.item(i, j).setFlags(Qt.ItemIsEditable)
+                self.unknown_values_table.item(i, j).setForeground(QColor('black'))
 
     def resizeEvent(self, a0) -> None:
         self.graph.move(self.width() - self.graph.width(), 0)

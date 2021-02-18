@@ -1,7 +1,7 @@
 import sympy
-from sympy.abc import *
 from math import sin, radians, degrees
 
+help(sympy.Symbol.__init__)
 g = 10
 h = sympy.Symbol('h')
 v0 = sympy.Symbol('v0')
