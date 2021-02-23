@@ -78,10 +78,10 @@ class TrajectoryGraph(FigureCanvas):
 
         # Основные параметры броска
         _h = _y0 + ((_v0 * sin(_a)) ** 2) / (2 * g_const)
-        _s = _v0 ** 2 * sin(_a * 2) / g_const
         _t_up = _v0 * sin(_a) / g_const
         _t_down = (2 * _h / g_const) ** 0.5
         _t = _t_up + _t_down
+        _s = _v0 * cos(_a) * _t
         #
 
         # Вычисление точек
@@ -112,7 +112,7 @@ class TrajectoryGraph(FigureCanvas):
     def customize_graph(self, limit):
         """ Дизайн графика """
 
-        self.ax.set_xlim(-0.05 * limit, limit)
+        self.ax.set_xlim(-0.05 * limit, 1.05 * limit)
         self.ax.set_ylim(0, limit)
 
         self.ax.set_title('Траектория движения')
@@ -139,6 +139,7 @@ class MainWindow(QMainWindow):
         self.build_btn = QPushButton('Построить', self.graph_tab)
         self.build_btn.resize(75, 25)
 
+        self.shot_type_cb.currentIndexChanged.connect(self.change_shot_type)
         self.build_btn.clicked.connect(self.build_graph)
         #
 
@@ -172,6 +173,22 @@ class MainWindow(QMainWindow):
         self.find_btn.clicked.connect(self.find_values)
         #
 
+    # tab 1
+    def change_shot_type(self):
+        """ Метод настраивает интерфейс в зависимости от указанного типа броска """
+
+        if self.shot_type_cb.currentText() == 'Произвольный':
+            self.angle_dsb.setEnabled(True)
+        elif self.shot_type_cb.currentText() == 'Вертикальный':
+            self.angle_dsb.setValue(90)
+            self.angle_dsb.setEnabled(False)
+        elif self.shot_type_cb.currentText() == 'Горизонтальный':
+            self.angle_dsb.setValue(0)
+            self.angle_dsb.setEnabled(False)
+        else:
+            raise TypeError(f'Error in change_shot_type method. Chosen unknown shot type '
+                            f'"{self.shot_type_cb.currentText()}"')
+
     def build_graph(self):
         """ Функция запускает "строительство" графика """
 
@@ -186,7 +203,9 @@ class MainWindow(QMainWindow):
 
         self.timer.stop()
         self.build_btn.setEnabled(True)
+    #
 
+    # tab 2
     def add_row(self):
         """ Добавляет строку в таблицу известных величин (2 tab) """
 
@@ -199,8 +218,7 @@ class MainWindow(QMainWindow):
         rows = self.known_values_table.rowCount()
         self.known_values_table.insertRow(rows)
 
-        if rows == len(name_to_variable):  # Проверка на возможность добавления новой величины
-            self.add_btn.setEnabled(False)
+        self.check_add_opportunity()
 
         # Создание всех элементов строки
         cb = QComboBox()
@@ -240,6 +258,12 @@ class MainWindow(QMainWindow):
         self.add_btn.setEnabled(True)  # Обновление состояния кнопки
         self.update_items()
 
+    def check_add_opportunity(self):
+        """ Проверка на возможность добавления новой величины """
+
+        free_space = len(name_to_variable) - y0.is_known
+        self.add_btn.setEnabled(self.known_values_table.rowCount() - 1 < free_space)
+
     def update_items(self):
         """ Обновление возможных item-ов в каждом QComboBox таблице в зависимости от выбранных """
 
@@ -251,6 +275,8 @@ class MainWindow(QMainWindow):
         # Получение возможных item-ов
         table_items = [table_cb.currentText() for table_cb in self.table_cbs]
         suitable_items = [item for item in name_to_variable.keys() if item not in table_items]
+        if y0.is_known:
+            suitable_items.remove(variable_to_name[y0])
         #
 
         # Заполнение возможными item-ами каждый QComboBox
@@ -356,8 +382,25 @@ class MainWindow(QMainWindow):
 
         y0.is_known = self.var_fame_chb.isChecked()
 
+        if self.var_fame_chb.isChecked():
+            index = all_form.index(s_v0_a_t)
+            all_form[index] = s_v0_a_y00
+        else:
+            index = all_form.index(s_v0_a_y00)
+            all_form[index] = s_v0_a_t
+
         if self.find_type_cb.currentText() != 'Все':  # Не обновляет таблицу если выбран поиск всего
             self.change_table()
+        else:  # Регулирование доступности указывания начальной высоты
+            if y0.is_known:
+                start_height = variable_to_name[y0]
+                for i in range(1, self.known_values_table.rowCount()):
+                    if self.known_values_table.cellWidget(i, 0).currentText() == start_height:
+                        self.known_values_table.cellWidget(i, 2).click()
+                        break
+            self.update_items()
+
+        self.check_add_opportunity()
 
     def change_table(self):
         """ Метод меняет отображение таблицы в зависимости от того, то хочет найти пользователь """
@@ -372,7 +415,7 @@ class MainWindow(QMainWindow):
         #
 
         # Если выбран поиск y0 искусственно снимаем известность y0
-        if self.find_type_cb.currentText() == 'Начальная высота (м)':
+        if self.find_type_cb.currentText() == variable_to_name[y0]:
             y0.is_known = False
             self.var_fame_chb.disconnect()
             self.var_fame_chb.setCheckState(0)
@@ -422,6 +465,10 @@ class MainWindow(QMainWindow):
         # Удаление последнего разделителя #
         self.known_values_table.setRowCount(self.known_values_table.rowCount() - 1)
         #
+    #
+
+    # tab 3
+    #
 
     def resizeEvent(self, a0) -> None:
         """ Обновление положения графика и кнопок при изменении размеров окна """

@@ -24,6 +24,11 @@ def is_unique(combination, unique_combs) -> bool:
 def get_collections(y0_fame: bool):
     print(y0_fame)
     y0.is_known = y0_fame
+
+    if not y0_fame:
+        index = all_form.index(s_v0_a_y00)
+        all_form[index] = s_v0_a_t
+
     start = time()
     variables_collections = {}
 

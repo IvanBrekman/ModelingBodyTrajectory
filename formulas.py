@@ -145,7 +145,9 @@ all_variables = [v0, a, h, s, t, vmx, vmn, tu, td, y0]
 
 # Формулы
 h_v0_a = Formula((h, v0, a, y0), (v0 ** 2 * sym.sin(a) ** 2) / (2 * g) - h + y0)
-s_v0_a = Formula((s, v0, a), v0 ** 2 * sym.sin(a * 2) / g - s)
+
+s_v0_a_y00 = Formula((s, v0, a), v0 ** 2 * sym.sin(a * 2) / g - s)
+s_v0_a_t = Formula((s, v0, a, t), v0 * sym.cos(a) * t - s)
 
 vmx_v0 = Formula((vmx, v0), v0 - vmx)
 vmn_v0_a = Formula((vmn, v0, a), v0 * sym.cos(a) - vmn)
@@ -154,7 +156,7 @@ tu_v0_a = Formula((tu, v0, a), v0 * sym.sin(a) / g - tu)
 td_h = Formula((td, h), (2 * h / g) ** 0.5 - td)
 t_tu_td = Formula((t, tu, td), tu + td - t)
 
-all_form = [h_v0_a, s_v0_a, vmx_v0, vmn_v0_a, tu_v0_a, td_h, t_tu_td]
+all_form = [h_v0_a, s_v0_a_y00, vmx_v0, vmn_v0_a, tu_v0_a, td_h, t_tu_td]
 #
 
 # "Хорошие" значения для поиска комбинаций переменных
