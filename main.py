@@ -25,12 +25,12 @@ name_to_variable = {
     'Стартовая скорость (м/с)': v0, 'Угол наклона (degrees)': a,
     'Макс. высота (м)': h, 'Дальность полета (м)': s, 'Время полета (с)': t,
     'Время подъема (с)': tu, 'Время спуска (с)': td,
-    'Макс. скорость (м/с)': vmx, 'Мин. скорость (м/с)': vmn
+    'Макс. скорость (м/с)': vmx, 'Мин. скорость (м/с)': vmn, 'Начальная высота (м)': y0
 }
 variable_to_name = {value: key for key, value in name_to_variable.items()}
 str_variable_to_name = {str(value): key for key, value in name_to_variable.items()}
 variable_to_max_value = {v0: 1_000, a: 90, h: 10_000, s: 100_000, t: 2_000,
-                         tu: 1_000, td: 1_000, vmx: 1_000, vmn: 1_000}
+                         tu: 1_000, td: 1_000, vmx: 1_000, vmn: 1_000, y0: 5_000}
 
 
 class TrajectoryGraph(FigureCanvas):
@@ -57,7 +57,7 @@ class TrajectoryGraph(FigureCanvas):
         """
 
         def xf(tf):
-            return _x0 + _v0 * cos(_a) * tf
+            return _v0 * cos(_a) * tf
 
         def yf(tf):
             return _y0 + (_v0 * sin(_a) * tf) - ((g_const * (tf ** 2)) / 2)
@@ -73,17 +73,15 @@ class TrajectoryGraph(FigureCanvas):
         # Начальные значения
         _a = rad(self.parent.angle_dsb.value())
         _v0 = self.parent.v0_dsb.value()
-        _x0 = self.parent.x0_dsb.value()
         _y0 = self.parent.y0_dsb.value()
         #
 
         # Основные параметры броска
         _h = _y0 + ((_v0 * sin(_a)) ** 2) / (2 * g_const)
-        _s = _x0 + _v0 ** 2 * sin(_a * 2) / g_const
+        _s = _v0 ** 2 * sin(_a * 2) / g_const
         _t_up = _v0 * sin(_a) / g_const
         _t_down = (2 * _h / g_const) ** 0.5
         _t = _t_up + _t_down
-        print(_t, type(_t))
         #
 
         # Вычисление точек
@@ -114,7 +112,7 @@ class TrajectoryGraph(FigureCanvas):
     def customize_graph(self, limit):
         """ Дизайн графика """
 
-        self.ax.set_xlim(-2, limit)
+        self.ax.set_xlim(-0.05 * limit, limit)
         self.ax.set_ylim(0, limit)
 
         self.ax.set_title('Траектория движения')
@@ -123,6 +121,8 @@ class TrajectoryGraph(FigureCanvas):
 
 
 class MainWindow(QMainWindow):
+    """ Класс основного окна приложения """
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -168,6 +168,7 @@ class MainWindow(QMainWindow):
         self.unknown_values_table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         self.find_type_cb.currentIndexChanged.connect(self.change_table)
+        self.var_fame_chb.stateChanged.connect(self.change_y0_fame)
         self.find_btn.clicked.connect(self.find_values)
         #
 
@@ -240,19 +241,24 @@ class MainWindow(QMainWindow):
         self.update_items()
 
     def update_items(self):
+        """ Обновление возможных item-ов в каждом QComboBox таблице в зависимости от выбранных """
 
         if not self.need_to_update_items:
             return
 
-        self.need_to_update_items = False
+        self.need_to_update_items = False  # Флажок необходимый для предотвращения рекурсии
 
+        # Получение возможных item-ов
         table_items = [table_cb.currentText() for table_cb in self.table_cbs]
         suitable_items = [item for item in name_to_variable.keys() if item not in table_items]
+        #
 
+        # Заполнение возможными item-ами каждый QComboBox
         for cb in self.table_cbs:
             current_text = cb.currentText()
             cb.clear()
             cb.addItems([current_text] + suitable_items)
+        #
 
         self.need_to_update_items = True
 
@@ -265,16 +271,16 @@ class MainWindow(QMainWindow):
         #
 
         # Заполнение значениями известных переменных
-        if self.find_type_cb.currentText() == 'Все':  #
+        if self.find_type_cb.currentText() == 'Все':  # Загрузка информации со всей таблицы
             for i in range(1, self.known_values_table.rowCount()):
                 item_name = self.known_values_table.cellWidget(i, 0).currentText()
                 value = self.known_values_table.cellWidget(i, 1).value()
 
                 variables[name_to_variable[item_name]] = value
-        else:
+        else:  # Если поиск конкретной величины, то находим первую заполненную комбинацию в таблице
             try:
                 self.find_any_filled_combination()
-            except ValueError as ve:
+            except ValueError as ve:  # Если нет заполненной комбинации - сообщаем пользователю
                 self.error_message.setText(ve.__str__())
                 self.error_message.show()
                 return
@@ -291,14 +297,13 @@ class MainWindow(QMainWindow):
                 target_variable = name_to_variable[self.find_type_cb.currentText()]
                 formulas = {key: formulas[key] for key in
                             sorted(formulas, key=lambda variable: variable != target_variable)}
-                print(formulas)
             #
 
             info = [
                 (variable_to_name[key], f'{key} = {formulas[key]}',
                  f'{float(known_values[key]):.2f}')
                 for key in formulas
-            ]
+            ]  # Преобразование найденной информации для загрузки в таблицу
             print(*info, sep='\n')
         except ValueError as ve:  # Вывод ошибки при введении некорректных данных
             self.error_message.setText(ve.__str__())
@@ -306,6 +311,7 @@ class MainWindow(QMainWindow):
             return
         #
 
+        # Если имеющихся данных недостаточно для поиска хотя бы 1 величины - сообщаем пользователю #
         if not info:
             text = 'С имеющимися данными невозможно рассчитать какую-либо величину'
             self.unknown_values_table.setRowCount(0)
@@ -333,16 +339,25 @@ class MainWindow(QMainWindow):
             for i in range(start_index, start_index + len(combination)):
                 var = name_to_variable[combination[i - start_index]]
                 values[var] = self.known_values_table.cellWidget(i, 1).value()
-            start_index += len(combination) + 1
+            start_index += len(combination) + 1  # Обновление стартового счетчика для таблицы
             #
 
+            print(values, start_index)
             if all(value != 0 for value in values.values()):  # Проверяем все значения комбинации
                 for variable, value in values.items():
                     variables[variable] = value
                 return
 
-        # Если не находится ни одной полной комбинации порождаем ошибку
+        # Если не находится ни одной полной комбинации порождаем ошибку #
         raise ValueError('Хотя бы одна комбинация должна быть заполнена ненулевыми значениями')
+
+    def change_y0_fame(self):
+        """ Метод обновляет известность y0 и обновляет таблицу """
+
+        y0.is_known = self.var_fame_chb.isChecked()
+
+        if self.find_type_cb.currentText() != 'Все':  # Не обновляет таблицу если выбран поиск всего
+            self.change_table()
 
     def change_table(self):
         """ Метод меняет отображение таблицы в зависимости от того, то хочет найти пользователь """
@@ -356,11 +371,20 @@ class MainWindow(QMainWindow):
             return
         #
 
+        # Если выбран поиск y0 искусственно снимаем известность y0
+        if self.find_type_cb.currentText() == 'Начальная высота (м)':
+            y0.is_known = False
+            self.var_fame_chb.disconnect()
+            self.var_fame_chb.setCheckState(0)
+            self.var_fame_chb.stateChanged.connect(self.change_y0_fame)
+        #
+
         # Загрузка наборов переменных для поиска целевой переменной
         self.add_btn.setEnabled(False)
-        variable = name_to_variable[self.sender().currentText()]
+        variable = name_to_variable[self.find_type_cb.currentText()]
         combinations = get_data_from_db(MY_DB, 'variables_collections', 'required_values',
-                                        {'variable': [str(variable)]})
+                                        {'variable': [str(variable)],
+                                         'is_known': [str(int(y0.is_known))]})
         #
 
         # Добавление каждого набора в таблицу
@@ -368,7 +392,6 @@ class MainWindow(QMainWindow):
         for combination in combinations:
             values = [str_variable_to_name[var] for var in combination[0].split()]
             self.combinations.append(values)
-            print(values)
 
             rows = self.known_values_table.rowCount()
             i = 0
@@ -389,6 +412,7 @@ class MainWindow(QMainWindow):
                 self.known_values_table.setCellWidget(i, 2, del_btn)
 
             self.known_values_table.setRowCount(self.known_values_table.rowCount() + 1)
+
             # Добавление разделителя наборов в таблице
             for j in range(3):
                 self.known_values_table.setItem(i + 1, j, QTableWidgetItem('Или' if j == 1 else ''))
@@ -400,6 +424,8 @@ class MainWindow(QMainWindow):
         #
 
     def resizeEvent(self, a0) -> None:
+        """ Обновление положения графика и кнопок при изменении размеров окна """
+
         self.graph.move(self.width() - self.graph.width(), 0)
         shift = self.graph.width() // 2 - self.build_btn.width() // 2
         self.build_btn.move(self.graph.x() + shift, self.graph.height() + 25)

@@ -13,7 +13,8 @@ def add_data_to_db(db: str, table: str, columns: (list, tuple), values: (list, t
     con = sqlite3.connect(db)
     cur = con.cursor()
 
-    request = f"""INSERT INTO {table}({', '.join(columns)}) VALUES ({", ".join(values)})"""
+    request = f"""INSERT INTO {table}({', '.join(columns)}) VALUES 
+                  ('{"', '".join(str(var) for var in values)}')"""
     print(request)
     cur.execute(request)
 
