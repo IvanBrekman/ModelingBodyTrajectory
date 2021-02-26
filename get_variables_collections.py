@@ -8,6 +8,7 @@ from time import time
 
 def check(combination, find_element) -> bool:
     """ Функция проверяет можно ли найти искомую переменную по заданным значениям """
+
     known_values = {value: best_values[value] for value in combination}
     find(known_values)
     return find_element in known_values
@@ -15,6 +16,7 @@ def check(combination, find_element) -> bool:
 
 def is_unique(combination, unique_combs) -> bool:
     """ Функция проверяет уникальность найденной комбинации """
+
     for un_comb in unique_combs:
         if set(un_comb).issubset(combination):
             return False
@@ -22,15 +24,19 @@ def is_unique(combination, unique_combs) -> bool:
 
 
 def get_collections(y0_fame: bool):
+    """ Функция генерирует коллекции переменных для поиска всех переменных, учитывая состояние y0 """
+
     print(y0_fame)
     y0.is_known = y0_fame
 
+    # Смена формул при необходимости
     if not y0_fame:
         index_s = all_form.index(s_v0_a_y00)
         index_vmx = all_form.index(vmx_v0_y00)
 
         all_form[index_s] = s_v0_a_t
         all_form[index_vmx] = vmx_v0_a_t
+    #
 
     start = time()
     variables_collections = {}

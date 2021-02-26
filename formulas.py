@@ -77,9 +77,9 @@ class Formula:
         solve = list(filter(lambda x: not is_complex(x), sym.solve(exp, target_variable)))
         #
 
-        if not solve:
+        if not solve:  # Проверка на наличие решений
             known_values = "; ".join(f"{key} = {value}" for key, value in another_variables.items())
-            raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula},\n'
+            raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
                              f'при {known_values}')
 
         if target_variable.is_angle:  # Корректирование ответа случае если переменная является углом
@@ -87,7 +87,13 @@ class Formula:
                       if 0 <= degrees(rad) <= 90][0]
             return degrees(val), f[0]
 
-        if target_variable == y0 and solve[0] < 10 ** -10:
+        if target_variable == y0 and solve[0] < 10 ** -10:  # Уточнение результата для y0
+            if solve[0] < -1:
+                known_values = "; ".join(f"{key} = {value}"
+                                         for key, value in another_variables.items())
+                raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
+                                 f'при {known_values}.\nОтрицательный результат')
+
             return 0.0, formula[0]
 
         positive_index = 0 if solve[0] >= 0 else 1
@@ -168,8 +174,6 @@ best_values = {v0: 50.0, a: 30.0, h: 31.25, s: 216.506350946110,
 
 
 if __name__ == '__main__':
-    b, f2 = find({v0: 50.0, h: 31.25})
-    print()
+    b, f1 = find({v0: 50.0, h: 31.25})
     print(b)
-    print()
     print(sorted(b, key=lambda val: val != a))
