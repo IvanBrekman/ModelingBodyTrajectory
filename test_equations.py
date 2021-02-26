@@ -1,21 +1,16 @@
-import sympy
-from math import sin, radians, degrees
+import sympy as sym
 
 
-help(sympy.Symbol.__init__)
 g = 10
-h = sympy.Symbol('h')
-v0 = sympy.Symbol('v0')
-a = sympy.Symbol('a')
+t = sym.Symbol('t')
+v0 = sym.Symbol('v0')
+a = sym.Symbol('a')
+vmx = sym.Symbol('vmx')
 
-equation = (v0 ** 2 * sympy.sin(a) ** 2) / (2 * g) - h
-equation = equation.subs({h: 31.25, v0: 50})
-solves = sympy.solveset(equation, a, sympy.S.Reals)
+equation = ((v0 * sym.cos(a)) ** 2 + (v0 * sym.sin(a) - g * t) ** 2) ** 0.5 - vmx
+equation = equation.subs({v0: 50, g: 10, vmx: 50, t: 5})
+print(equation)
+solves = sym.solve(equation, a)
 print(equation, solves)
 for solve in solves:
     print(solve)
-
-exp = str(equation)
-ans = sympy.solve(exp, a)
-for num in ans:
-    print(degrees(num))

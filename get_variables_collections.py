@@ -26,8 +26,11 @@ def get_collections(y0_fame: bool):
     y0.is_known = y0_fame
 
     if not y0_fame:
-        index = all_form.index(s_v0_a_y00)
-        all_form[index] = s_v0_a_t
+        index_s = all_form.index(s_v0_a_y00)
+        index_vmx = all_form.index(vmx_v0_y00)
+
+        all_form[index_s] = s_v0_a_t
+        all_form[index_vmx] = vmx_v0_a_t
 
     start = time()
     variables_collections = {}
@@ -72,12 +75,19 @@ def get_collections(y0_fame: bool):
     # Запись результатов в базу данных
     for variable in variables_collections:
         for comb in variables_collections[variable][1]:
-            add_data_to_db(MY_DB, 'variables_collections', ('variable', 'required_values', 'is_known'),
+            add_data_to_db(MY_DB, 'variables_collections',
+                           ('variable', 'required_values', 'is_known'),
                            (variable, ' '.join(str(v) for v in comb), int(y0_fame)))
     #
 
 
 if __name__ == '__main__':
+    us_ans = input('delete combinations? (yes or no)\n')
+    while us_ans not in ('yes', 'no'):
+        us_ans = input('is all ok? (yes, no)\n')
+    if us_ans == 'no':
+        exit()
+
     delete_data_from_db(MY_DB, 'variables_collections', {})
     get_collections(True)
     get_collections(False)

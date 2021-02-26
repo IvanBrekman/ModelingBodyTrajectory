@@ -67,17 +67,19 @@ class Formula:
 
         # Расчет формулы для переменной, выражения и решения для переменной
         formula = sym.solve(self._formula, target_variable)
-        another_variables[g] = g_const
+        another_variables[g] = CONSTANTS['g']
         if y0.is_known and y0 not in another_variables:
             another_variables[y0] = y0_const
+        if self.variables == (vmx, v0, a, t) and target_variable == v0:
+            solve = formula[1].subs(another_variables)
+            return solve, formula[1]
         exp = self._formula.subs(another_variables)
         solve = list(filter(lambda x: not is_complex(x), sym.solve(exp, target_variable)))
-        #print(solve, self.variables, another_variables, formula)
         #
 
         if not solve:
             known_values = "; ".join(f"{key} = {value}" for key, value in another_variables.items())
-            raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
+            raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula},\n'
                              f'при {known_values}')
 
         if target_variable.is_angle:  # Корректирование ответа случае если переменная является углом
@@ -89,7 +91,6 @@ class Formula:
             return 0.0, formula[0]
 
         positive_index = 0 if solve[0] >= 0 else 1
-        #print(solve, self.variables, another_variables, formula)
         return solve[positive_index], formula[positive_index]
 
 
@@ -111,7 +112,6 @@ def find(known_values: dict, variable_formula=None) -> (dict, dict):
     for formula in all_form:
         var = formula.can_find(known_values)
         if var:
-            #print(known_values, 'bbbbbbbb')
             val, f = formula.calc(var, {k: k.get_value(v) for k, v in known_values.items()
                                         if k in formula.variables})
             known_values[var] = val
@@ -149,14 +149,16 @@ h_v0_a = Formula((h, v0, a, y0), (v0 ** 2 * sym.sin(a) ** 2) / (2 * g) - h + y0)
 s_v0_a_y00 = Formula((s, v0, a), v0 ** 2 * sym.sin(a * 2) / g - s)
 s_v0_a_t = Formula((s, v0, a, t), v0 * sym.cos(a) * t - s)
 
-vmx_v0 = Formula((vmx, v0), v0 - vmx)
+vmx_v0_y00 = Formula((vmx, v0), v0 - vmx)
+vmx_v0_a_t = Formula((vmx, v0, a, t),
+                     ((v0 * sym.cos(a)) ** 2 + (v0 * sym.sin(a) - g * t) ** 2) ** 0.5 - vmx)
 vmn_v0_a = Formula((vmn, v0, a), v0 * sym.cos(a) - vmn)
 
 tu_v0_a = Formula((tu, v0, a), v0 * sym.sin(a) / g - tu)
 td_h = Formula((td, h), (2 * h / g) ** 0.5 - td)
 t_tu_td = Formula((t, tu, td), tu + td - t)
 
-all_form = [h_v0_a, s_v0_a_y00, vmx_v0, vmn_v0_a, tu_v0_a, td_h, t_tu_td]
+all_form = [h_v0_a, s_v0_a_y00, vmx_v0_y00, vmn_v0_a, tu_v0_a, td_h, t_tu_td]
 #
 
 # "Хорошие" значения для поиска комбинаций переменных
