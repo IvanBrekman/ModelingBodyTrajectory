@@ -334,6 +334,11 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         self.settings_action.triggered.connect(self.show_settings_wnd)
         #
 
+        # Установка триггеров на кнопки помощи
+        self.moment_time_help_btn.clicked.connect(self.show_help)
+        self.y0_help_btn.clicked.connect(self.show_help)
+        #
+
         # Первый tab
         self.graph = TrajectoryGraph(self, self.graph_tab, 5, 4)
         self.shot_data = {}
@@ -347,7 +352,7 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         self.load_btn.clicked.connect(self.load_info)
 
         self.example_btn = QPushButton('Пример файла', self.graph_tab)
-        self.example_btn.resize(85, 25)
+        self.example_btn.resize(95, 25)
         self.example_btn.clicked.connect(self.show_example_file)
 
         self.build_btn = QPushButton('Построить', self.graph_tab)
@@ -417,6 +422,11 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
     def show_about_wnd(self):
         self.about_wnd = AboutWindow()
         self.about_wnd.show()
+
+    def show_help(self):
+        self.about_wnd = AboutWindow()
+        self.about_wnd.show()
+        self.about_wnd.tabWidget.setCurrentIndex(4)
 
     def show_settings_wnd(self):
         self.settings_wnd = SettingsWindow()
@@ -838,6 +848,9 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         graph_file = os.path.abspath(f'{DATA_DIR}/results/graph_files/{graph_file}')
         #
 
+        if not (self.check_file(info_file) and self.check_file(graph_file)):  # Проверяем файлы
+            return
+
         # Запуск файлов
         os.startfile(graph_file)
         time.sleep(0.5)  # Задержка открытия, чтобы текстовый файл был выше графика
@@ -854,6 +867,8 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         info_file = f'{DATA_DIR}/results/info_files/{info_file}'
         #
 
+        if not self.check_file(info_file):  # Проверяем файл
+            return
         self.load_from_file(info_file)  # Загрузка информации
 
         self.build_btn.click()  # Запуск строительства графика
@@ -866,7 +881,7 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         self.results_table.setRowCount(0)
         self.show_buttons = []
         self.load_buttons = []
-        self.delete_buttons = []
+        self.delete_exp_buttons = []
         #
 
         # Заполнение таблицы
@@ -895,7 +910,7 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
             # Добавление виджетов
             self.show_buttons.append(show_btn)
             self.load_buttons.append(load_btn)
-            self.delete_buttons.append(delete_btn)
+            self.delete_exp_buttons.append(delete_btn)
 
             self.results_table.setCellWidget(i, 1, show_btn)
             self.results_table.setCellWidget(i, 2, load_btn)
@@ -907,7 +922,7 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         """ Метод удаляет эксперимент из базы данных """
 
         # Получение информации
-        delete_index = self.delete_buttons.index(self.sender())
+        delete_index = self.delete_exp_buttons.index(self.sender())
         delete_name = self.results_table.item(delete_index, 0).text()
 
         info_file, graph_file = get_data_from_db(MY_DB, 'results', 'info_file, graph_file',
@@ -917,18 +932,32 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         #
 
         # Удаление файлов
-        os.remove(info_file)
-        os.remove(graph_file)
+        try:
+            os.remove(info_file)
+        except FileNotFoundError:
+            pass
+        try:
+            os.remove(graph_file)
+        except FileNotFoundError:
+            pass
         #
 
         # Удаление из таблицы и массивов
         self.show_buttons.pop(delete_index)
         self.load_buttons.pop(delete_index)
-        self.delete_buttons.pop(delete_index)
+        self.delete_exp_buttons.pop(delete_index)
         self.results_table.removeRow(delete_index)
         #
 
         delete_data_from_db(MY_DB, 'results', {'name': [delete_name]})  # Удаление из базы данных
+
+    def check_file(self, path) -> bool:
+        if not os.path.exists(path):
+            self.error_message.setText(f'Файлы эксперимента повреждены. '
+                                       f'Невозможно открыть файл {path}')
+            self.error_message.show()
+            return False
+        return True
     #
 
     def resizeEvent(self, a0) -> None:
@@ -943,7 +972,7 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         # Сдвиг для кнопки "Загрузить" и "Пример файла" #
         shift = shift_centre - self.about_shot_btn.width() - 25
         self.load_btn.move(self.graph.x() + shift, self.graph.height() + 25)
-        self.example_btn.move(self.graph.x() + shift - 5, self.graph.height() + 50)
+        self.example_btn.move(self.graph.x() + shift - 10, self.graph.height() + 50)
 
         # Сдвиг для кнопки "О броске" #
         shift = shift_centre + self.about_shot_btn.width() + 25

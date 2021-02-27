@@ -6,13 +6,238 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>880</width>
+    <height>560</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>880</width>
+    <height>560</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>О программе</string>
   </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Calibri'; font-size:18pt; background-color:#ffffff;&quot;&gt;Описание функционала приложения&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10.5pt; background-color:#ffffff;&quot;&gt;Данное приложение предназначено для визуализации законов кинематики, вычисление параметров броска&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10.5pt; background-color:#ffffff;&quot;&gt;и генерации задач по теме &amp;quot;баллистика&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Построение траектории</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0" colspan="2">
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>819</width>
+            <height>481</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;Построение траектории&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Построение графика:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10.5pt; color:#434343;&quot;&gt;1. &lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;Выберите тип броска из выпадающего спика.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10.5pt; color:#434343;&quot;&gt;2. &lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;Заполните начальную информацию о броске*.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........а) Укажите начальную скорость&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........б) Укажите угол наклона броска (в градусах)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........в) Укажите начальную высоту (y0) (необязательно)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10.5pt; color:#434343;&quot;&gt;3. Нажмите кнопку &amp;quot;Построить&amp;quot;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;* Вы можете загрузить информацию с любого** выбранного файла, нажав на кнопку &amp;quot;Загрузить&amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:11pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;** Файл должен соответствовать шаблону. Чтобы посмотреть шаблон, нажмите на кнопку &amp;quot;Пример файла&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Просмотреть информацию о броске и сохранить ее:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;1. Чтобы просмотреть информацию о броске нажмите кнопку &amp;quot;О броске&amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:11pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;2. Чтобы сохранить эксперимент нажмите &amp;quot;Сохранить эксперимент&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;3. В открывшемся окне укажите название эксперимента и способ сохранения графика&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;4. Нажмите кнопку &amp;quot;Сохранить&amp;quot;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Поиск неизвестной величины</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>819</width>
+            <height>547</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;Поиск неизвкстной величины&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Поиск всех значений:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. Выберите вариант &amp;quot;Все&amp;quot; из выпадающего списка &amp;quot;Что вы хотите найти?&amp;quot;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;2. Нажимая на кнопку &amp;quot;+&amp;quot;, добавляйте известные величины&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........а) Укажите тип добавляемой величины из выпадающего списка&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........б) Укажите значение величины&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;........*Для удаления вылечины нажмите кнопку &amp;quot;x&amp;quot; у соответствующей величины&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;3. Нажмите кнопку &amp;quot;Найти&amp;quot;. Результат будет виден в правой таблице &amp;quot;Найденные величины&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Поиск конкретной величины:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;1. Выберите интересубщую величину из выпадающего списка &amp;quot;Что вы хотите найти?&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;2. Таблица заполнится всеми комбинациями переменных, зная которые можно найти искомую величину.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;3. Заполните полностью один из вариантов ненулевыми значениями*&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;4. Нажмите кнопку &amp;quot;Найти&amp;quot;. Результат будет виден в правой таблице &amp;quot;Найденные величины&amp;quot;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;* Если будет заполненно несколько вариантов, приложение выполнит поиск по первому найденному варианту.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;Примечание: При смене известности Начальной высоты (y0) варианты комбинаций автоматически изменятся&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;(как и некоторые формулы расчетов).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Эксперименты</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_3">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>836</width>
+            <height>403</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;Эксперименты&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Представление информации о сохраненных экспериментах.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. Вы можете просмотрев текстовый файл с информацией о броске и график интересуюшего эксперимента&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;.... &lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;нажав на кнопку &amp;quot;Просмотреть&amp;quot; у соответствующего названия эксперимента.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;2. Для загрузки информации эксперимента нажмите на кнопку &amp;quot;Загрузить&amp;quot; у соответсвующего названия эксперимента&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;.... &lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;Вас переключит на 1 страницу приложения.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;3. Для удаления эксперимента нажмите на кнопку &amp;quot;Удалить&amp;quot; &lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;у соответсвующего названия эксперимента&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;При удалении файлы эксперимента также удаляются.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Настройки и теория</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_6">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_6">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>836</width>
+            <height>403</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_12">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;Настройки и теория&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Настройки.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. Перейдя в меню настроек укажите все необходимые значения&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;2. Для сохранения результатов нажмите кнопку &amp;quot;Сохранить и выйти&amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Теория.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. Выбрав пукнт меню &amp;quot;Теория&amp;quot;, выберите каким образом вы хотите ее просмотреть&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;2. Откроется либо браузер с уроками РЭШ по теме кинематики и баллистики,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;либо откроется локальный pdf документ с учебником.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_6">
+      <attribute name="title">
+       <string>Мгновенное время и начальная высота</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_10">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_5">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_5">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>819</width>
+            <height>483</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;Мгновенное время и начальная высота&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Мгновенное время.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. При построении графика будет найдено время полета и установлено в качестве максимального значения&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;2. Выбрав какое-то время на графике появится точка, в которой находилось тело в указанный момент времени*&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343; background-color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;* Информация о мгновенном состоянии тела видна в окне &amp;quot;О броске&amp;quot;, однако она не сохраняется&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Wingdings'; font-size:11pt;&quot;&gt;Ø&lt;/span&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline;&quot;&gt;Начальная высота.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;1. При расчете некоторых формул важно знать начальную высоту, поэтому если она известна расчет некоторых&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;величин упрощается, &lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;что дает новые, упрощенные комбинации значений&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;2. Для смены известности начальной высоты нажмите* на чекбокс. Замена формул и расчетов произойдет&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-size:10.5pt; color:#434343;&quot;&gt;автоматически&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;* При указании в &amp;quot;Что вы хотите найти?&amp;quot; пункт &amp;quot;Начальная высота (м)&amp;quot; известность автоматически спадет,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt; и вы не сможете ее поменять пока не выберите другой пункт.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;Примечание: Пока y0 известна, вы не сможете добавить ее в таблицу и указать значение.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;Необходимо снять известность и после этого добавлять. Также, при включении известности y0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:10pt; color:#434343;&quot;&gt;....&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto'; font-size:11pt; color:#434343;&quot;&gt;из таблицы удалится строка со значением y0 (если такая была).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>О себе</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_4">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_4">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>819</width>
+            <height>487</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; text-decoration: underline; color:#7030a0; background-color:#ffffff;&quot;&gt;О себе&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Здравствуй, дорогой Пользователь. Меня зовут Никита Жуков и я являюсь разработчиком данного проекта.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Этот проект разрабатывался с целью помочь ученикам разобраться с основами кинематики и баллистики.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Также это приложение будет полезно учителям и методистам, составляющим задачи к собрникам задач или&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;различных самостоятельных работ.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Я начинающий разработчик полный энтузиазма, так что если у тебя есть какие от идеи и ты ищешь&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;программиста, им могу стать я.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Спасибо за использование приложения.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Меня можно найти:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;ВК: &lt;/span&gt;&lt;a href=&quot;https://vk.com/balanceofthebladekeeper&quot;&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://vk.com/balanceofthebladekeeper&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Почта: &lt;/span&gt;&lt;a href=&quot;nikitka-zhukov03@mail.ru&quot;&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;nikitka-zhukov03@mail.ru&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Телеграмм: &lt;/span&gt;&lt;a href=&quot;https://teleg.run/IvanBrekman&quot;&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://teleg.run/IvanBrekman&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Сайт: &lt;/span&gt;&lt;a href=&quot;http://nikita-pro.ru&quot;&gt;&lt;span style=&quot; font-size:11pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://nikita-pro.ru&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
