@@ -63,7 +63,7 @@ class Formula:
             "Error occurred in Formula.calc_formula. Got incorrect variables."
         assert 1 + len(another_variables) == len(self.variables), \
             f"Error occurred in Formula.calc_formula. Not enough variables (expected " \
-            f"{len(self.variables)}, got {1 + len(another_variables)}"
+            f"{len(self.variables) - 1}, got {len(another_variables)}"
 
         # Расчет формулы для переменной, выражения и решения для переменной
         formula = sym.solve(self._formula, target_variable)
@@ -109,7 +109,7 @@ def find(known_values: dict, variable_formula=None) -> (dict, dict):
     """
 
     assert all(isinstance(value, sym.Symbol) for value in known_values), \
-        "Error occurred in VariableInfo.find() method: not all values has type Sympy.Symbol"
+        "Error occurred in find() function: not all values has type Sympy.Symbol"
 
     len_kn_val = len(known_values)
     variable_formula = variable_formula or {}
