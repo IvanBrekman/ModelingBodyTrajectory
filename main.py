@@ -952,6 +952,8 @@ class MainWindow(QMainWindow, main_wnd.Ui_MainWindow):
         delete_data_from_db(MY_DB, 'results', {'name': [delete_name]})  # Удаление из базы данных
 
     def check_file(self, path) -> bool:
+        """ Метод проверяет существование файлов из базы данных """
+
         if not os.path.exists(path):
             self.error_message.setText(f'Файлы эксперимента повреждены. '
                                        f'Невозможно открыть файл {path}')
@@ -988,8 +990,12 @@ if __name__ == '__main__':
 
     update_constants()  # Обновление констант
 
+    # Создание главного окна приложения
     wnd = MainWindow()
     wnd.show()
+    #
 
+    # Запуск цикла обработки
     sys.excepthook = except_hook
     sys.exit(app.exec())
+    #

@@ -6,15 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>625</height>
+    <width>910</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>870</width>
-    <height>625</height>
+    <width>910</width>
+    <height>650</height>
    </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Times New Roman</family>
+    <pointsize>11</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Визуализация законов кинематики</string>
@@ -424,8 +430,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>870</width>
-     <height>21</height>
+     <width>910</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

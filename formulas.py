@@ -77,27 +77,33 @@ class Formula:
         solve = list(filter(lambda x: not is_complex(x), sym.solve(exp, target_variable)))
         #
 
+        known_values = "; ".join(f"{key} = {value}" for key, value in another_variables.items())
         if not solve:  # Проверка на наличие решений
-            known_values = "; ".join(f"{key} = {value}" for key, value in another_variables.items())
             raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
-                             f'при {known_values}')
+                             f'при {known_values}.\n Отсутствуют решения')
 
         if target_variable.is_angle:  # Корректирование ответа случае если переменная является углом
             val, f = [(rad, [formula[i]]) for i, rad in enumerate(solve)
                       if 0 <= degrees(rad) <= 90][0]
+
+            if degrees(val) == 0:
+                raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
+                                 f'при {known_values}.\nНекорректный угол')
             return degrees(val), f[0]
 
         if target_variable == y0 and solve[0] < 10 ** -10:  # Уточнение результата для y0
             if solve[0] < -1:
-                known_values = "; ".join(f"{key} = {value}"
-                                         for key, value in another_variables.items())
                 raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
                                  f'при {known_values}.\nОтрицательный результат')
 
             return 0.0, formula[0]
 
         positive_index = 0 if solve[0] >= 0 else 1
-        return solve[positive_index], formula[positive_index]
+        try:
+            return solve[positive_index], formula[positive_index]
+        except IndexError:
+            raise ValueError(f'Невозможно рассчитать формулу {target_variable} = {formula[0]},\n'
+                             f'при {known_values}.\nОтрицательный результат')
 
 
 def find(known_values: dict, variable_formula=None) -> (dict, dict):
