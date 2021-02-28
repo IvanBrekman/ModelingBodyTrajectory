@@ -301,11 +301,12 @@ class SaveShotWindow(QWidget, save_results.Ui_Form):
             raise NameError(f'Error occurred in SaveShotWindow.save() method. '
                             f'Name {graph_file_name} already exist')
 
-        self.shot_graph.plot()
         if need_gif:
+            self.shot_graph.plot()
             self.shot_graph.anim.save(f'{path}/graph_files/{graph_file_name}', writer='imagemagick')
         else:
             self.shot_graph.figure.savefig(f'{path}/graph_files/{graph_file_name}')
+            self.shot_graph.plot(False)
         #
 
         # Сохранение информации о броске в базу данных #

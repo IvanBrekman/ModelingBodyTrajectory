@@ -288,7 +288,7 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "Найденные величины"))
         self.label_9.setText(_translate("MainWindow", "Известные величины"))
         self.find_btn.setText(_translate("MainWindow", "Найти"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Поиск неизвестной велиины"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Поиск неизвестной величины"))
         item = self.results_table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Название эксперимента"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Эксперименты"))
